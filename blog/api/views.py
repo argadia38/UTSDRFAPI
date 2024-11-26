@@ -7,23 +7,17 @@ from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Category, Product, Order, OrderDetail
-from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, OrderDetailSerializer
+from .serializers import CategorySerializer, ProductSerializer, OrderSerializer, OrderDetailSerializer,UserSerializer
 from rest_framework.views import APIView
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 
-class UserDetailView(APIView):
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        group = [group.name for group in user.groups.all()]
-        return Response ({
-            "username": user.username,
-            "is_superuser" : user.is_superuser,
-            "groups": group
-        })
-
-
+    
 # ViewSet untuk Category
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
