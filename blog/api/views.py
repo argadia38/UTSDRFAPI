@@ -35,6 +35,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        for order in queryset:
+            order.username = order.user.username  # Menambahkan username ke objek order
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 # ViewSet untuk OrderDetail
 class OrderDetailViewSet(viewsets.ModelViewSet):

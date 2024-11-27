@@ -21,11 +21,13 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    username = serializers.CharField(source='user.username', read_only=True)
     
     class Meta:
         model = Order
         fields = '__all__'
+
 
 class OrderDetailSerializer(serializers.ModelSerializer):
     order = OrderSerializer()
