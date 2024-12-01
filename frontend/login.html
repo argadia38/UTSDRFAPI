@@ -20,7 +20,7 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
                                     <div class="card-body">
-                                        <form id="loginForm" onsubmit="handleLogin(event)">
+                                        <form id="loginform">
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="username" type="text" placeholder="username" required />
                                                 <label for="username">Username</label>
@@ -58,38 +58,51 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script>
-        async function handleLogin(event) {
-            event.preventDefault();
-        
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-        
-            try {
-                const response = await fetch("http://127.0.0.1:8000/api/token/", {
-                    method: "POST",
+            document.getElementById('loginform').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+            
+                const response = await fetch('http://127.0.0.1:8000/api/token/', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ username, password }),
+                    body: JSON.stringify({ username, password })
                 });
-        
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    alert(`Login failed: ${errorData.detail}`);
-                    return;
+            
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('accessToken', data.access);
+                    localStorage.setItem('refreshToken', data.refresh);
+                    fetchUserDetail();
+                } else {
+                    document.getElementById('error-message').innerText = 'Username atau Password salah';
                 }
-        
-                const data = await response.json();
-                localStorage.setItem("accessToken", data.access);
-                localStorage.setItem("refreshToken", data.refresh);
-        
-                alert("Login successful!");
-                window.location.href = "index.html"; // Redirect
-            } catch (error) {
-                console.error("Error:", error);
-                alert("An error occurred during login.");
+            });
+            
+            async function fetchUserDetail() {
+                const response = await fetch('http://127.0.0.1:8000/api/user-detail/', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                    }
+                });
+            
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.groups && data.groups.includes('kasir')) {
+                        window.location.href = 'kasir/index.html';
+                    } else if (data.is_superuser) {
+                        window.location.href = 'index.html';
+                    } else {
+                        window.location.href = '/landingPage.html';
+                    }
+                } else {
+                    localStorage.clear();
+                    alert('Gagal mendapatkan user, silakan coba lagi');
+                }
             }
-        }
-    </script>        
+            
+        </script>        
     </body>
 </html>

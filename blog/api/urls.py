@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import CategoryViewSet, ProductViewSet, OrderViewSet, OrderDetailViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import UserViewSet
+from .views import UserViewSet, UserDetailView
+
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
@@ -15,5 +16,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('token/',TokenObtainPairView.as_view()),
     path('token/refresh/',TokenRefreshView.as_view()),
+    path('user-detail/', UserDetailView.as_view(), name='user-detail'),
 
 ]

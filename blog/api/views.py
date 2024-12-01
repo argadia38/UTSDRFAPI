@@ -12,7 +12,18 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 
 
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        user = request.user
+        group = [group.name for group in user.groups.all()]
+        return Response ({
+            "username": user.username,
+            "is_superuser" : user.is_superuser,
+            "groups": group
+        })
+        
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
