@@ -158,28 +158,29 @@
                             <h3>Form Category</h3>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form id="categoryForm">
                                 <!-- ID Category -->
                                 <div class="mb-3">
                                     <label for="id_category" class="form-label">ID Category</label>
                                     <input type="text" class="form-control" id="id_category" placeholder="Enter ID Category">
                                 </div>
-                                
+                            
                                 <!-- Nama -->
                                 <div class="mb-3">
                                     <label for="nama" class="form-label">Nama</label>
                                     <input type="text" class="form-control" id="nama" placeholder="Enter Name">
                                 </div>
-                                
+                            
                                 <!-- Deskripsi -->
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi</label>
                                     <textarea class="form-control" id="deskripsi" rows="3" placeholder="Enter Description"></textarea>
                                 </div>
-                                
+                            
                                 <!-- Submit Button -->
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-primary" id="submitCategory">Submit</button>
                             </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -216,5 +217,61 @@
             window.location.href = "login.html";
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const apiBaseURL = "http://127.0.0.1:8000/api/categories/"; // Replace with your API domain
+            const token = localStorage.getItem("accessToken");
+    
+            if (!token) {
+                alert("You need to be logged in to perform this action.");
+                window.location.href = "login.html";
+                return;
+            }
+    
+            const headers = {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            };
+    
+            // Handle form submission
+            document.getElementById("submitCategory").addEventListener("click", async () => {
+                const idCategory = document.getElementById("id_category").value;
+                const name = document.getElementById("nama").value;
+                const description = document.getElementById("deskripsi").value;
+    
+                if (!idCategory || !name || !description) {
+                    alert("All fields are required!");
+                    return;
+                }
+    
+                const data = {
+                    id: idCategory, // Replace with the expected ID field name, if needed
+                    name: name,
+                    description: description,
+                };
+    
+                try {
+                    const response = await fetch(`${apiBaseURL}/categories/`, {
+                        method: "POST",
+                        headers: headers,
+                        body: JSON.stringify(data),
+                    });
+    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        alert("Failed to create category: " + JSON.stringify(errorData));
+                        return;
+                    }
+    
+                    alert("Category created successfully!");
+                    document.getElementById("categoryForm").reset();
+                } catch (error) {
+                    console.error("Error creating category:", error);
+                    alert("An error occurred while creating the category.");
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>

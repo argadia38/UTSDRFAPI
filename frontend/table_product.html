@@ -215,10 +215,9 @@
         }
     </script>
     <script>
-        // Initialize the DataTable
         document.addEventListener("DOMContentLoaded", () => {
             const productTableBody = document.querySelector("#productTableBody");
-      
+    
             async function fetchProducts() {
                 try {
                     const response = await fetch("http://127.0.0.1:8000/api/products/", {
@@ -226,26 +225,26 @@
                             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
                         },
                     });
-      
+    
                     if (!response.ok) {
-                        throw new Error("Failed to fetch orders");
+                        throw new Error("Failed to fetch products");
                     }
-      
+    
                     const products = await response.json();
                     const productArray = Array.isArray(products) ? products : products.results || [];  // Pastikan data sudah berupa array
                     productTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data
-      
+    
                     // Iterasi data products dan buat baris untuk setiap product
                     productArray.forEach((product) => {
-                      const row = `
-                          <tr>
+                        const row = `
+                            <tr>
                                 <td>${product.id_product}</td>
                                 <td>${product.image_url}</td>
                                 <td>${product.name}</td> <!-- Mengakses username dari user -->
                                 <td>${product.description}</td>
                                 <td>${product.price}</td>
                                 <td>${product.stock}</td>
-                                <td>${product.category.name}</td>
+                                <td>${product.nameCategory}</td> <!-- Ganti categoryname dengan nameCategory -->
                                 <td>${product.created_at}</td>
                                 <td>${product.updated_at}</td>
                                 <td>
@@ -253,31 +252,221 @@
                                     <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id_product})">Delete</button>
                                 </td>
                             </tr>
-                      `;
-                      productTableBody.innerHTML += row;
-                  });
-                  
+                        `;
+                        productTableBody.innerHTML += row;
+                    });
+    
                 } catch (error) {
-                    console.error("Error fetching orders:", error);
-                    alert("Unable to fetch order data.");
+                    console.error("Error fetching products:", error);
+                    alert("Unable to fetch product data.");
                 }
             }
-      
+    
             fetchProducts();
         });
+
+        async function deleteProduct(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                try {
+                    const response = await fetch(`http://127.0.0.1:8000/api/products/${productId}/`, {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
       
-        // Contoh fungsi edit dan delete (implementasikan sesuai kebutuhan)
-        function editOrder(productID) {
-            alert(`Edit order with ID: ${productID}`);
-            // Implementasi untuk edit order
-        }
-      
-        function deleteOrder(productID) {
-            if (confirm("Are you sure you want to delete this order?")) {
-                alert(`Delete order with ID: ${productID}`);
-                // Implementasi untuk menghapus order
+                    if (response.ok) {
+                        alert("product deleted successfully");
+                        // Refresh table after deletion
+                        window.location.reload();
+                    } else {
+                        throw new Error("Failed to delete product");
+                    }
+                } catch (error) {
+                    console.error("Error deleting product:", error);
+                    alert("Unable to delete product.");
+                }
             }
         }
-      </script>
+    </script>
+    
+      <div class="modal fade" id="editProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" id="editProductName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="editProductDescription"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga</label>
+                            <input type="number" class="form-control" id="editProductPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stok</label>
+                            <input type="number" class="form-control" id="editProductStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Kategori</label>
+                            <select class="form-select" id="editProductCategory" required>
+                                <!-- Categories will be populated dynamically -->
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <input type="hidden" id="editProductId">
+                        <button  button type="submit" class="btn btn-primary" >Save Changes</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function editProduct(productId) {
+            const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+        
+            // Ambil elemen form di modal
+            const editProductName = document.getElementById("editProductName");
+            const editProductDescription = document.getElementById("editProductDescription");
+            const editProductPrice = document.getElementById("editProductPrice");
+            const editProductStock = document.getElementById("editProductStock");
+            const editProductCategory = document.getElementById("editProductCategory");
+            const editProductId = document.getElementById("editProductId");
+            
+            // Kosongkan dropdown untuk mencegah duplikasi
+            editProductCategory.innerHTML = "";
+        
+            // Fetch data product berdasarkan ID
+            fetch(`http://127.0.0.1:8000/api/products/${productId}/`, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch product: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(product => {
+                // Isi form dengan data produk
+                editProductId.value = product.id_product;
+                editProductName.value = product.name;
+                editProductDescription.value = product.description;
+                editProductPrice.value = product.price;
+                editProductStock.value = product.stock;
+        
+                // Fetch data kategori untuk mengisi dropdown
+                return fetch("http://127.0.0.1:8000/api/categories/", {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch categories: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(categories => {
+                    // Tambahkan kategori ke dropdown
+                    categories.forEach(category => {
+                        const option = document.createElement("option");
+                        option.value = category.id_category; // ID numerik kategori
+                        option.textContent = category.name;
+                    
+                        // Tandai kategori yang cocok dengan produk
+                        if (category.id_category === product.category.id_category) {
+                            option.selected = true;
+                        }
+                    
+                        editProductCategory.appendChild(option);
+                    });                    
+        
+                    // Tampilkan modal
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error("Error fetching categories:", error);
+                    alert("Failed to load categories.");
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching product:", error);
+                alert("Failed to load product.");
+            });
+        }
+        
+        document.getElementById("editProductForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+        
+            const productId = document.getElementById("editProductId").value;
+            const name = document.getElementById("editProductName").value;
+            const description = document.getElementById("editProductDescription").value;
+            const price = document.getElementById("editProductPrice").value;
+            const stock = document.getElementById("editProductStock").value;
+            const categoryId = document.getElementById("editProductCategory").value;
+            console.log("Category ID selected:", categoryId);
+        
+            console.log({
+                name: name,
+                category: categoryId,
+                description: description,
+                price: price,
+                stock: stock
+            });
+            
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/products/${productId}/`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        description: description,
+                        price: price,
+                        stock: stock,
+                        category: categoryId, 
+                    })
+                });
+                
+                console.log("Response status:", response.status);
+                
+                if (response.ok) {
+                    alert("Product updated successfully!");
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editProductModal'));
+                    modal.hide(); // Close modal
+                    fetchProducts(); // Refresh data di tabel setelah update
+                } else {
+                    const error = await response.json();
+                    console.error("Error updating product:", error);
+                    alert(`Failed to update product: ${error.message || "Unknown error"}`);
+                }
+            } catch (error) {
+                console.error("Error updating product:", error);
+                alert("Unable to update product. Please try again.");
+            }
+        });
+
+        function fetchProducts() {
+           
+        }
+        
+    </script>
+    
 </body>
 </html>

@@ -254,10 +254,7 @@
         fetchOrders();
     });
   
-    function editOrder(orderId) {
-        // Redirect ke halaman edit dan kirim ID order
-        window.location.href = `editFormOrder.html?orderId=${orderId}`;
-    }
+    
   
     async function deleteOrder(orderId) {
         if (confirm("Are you sure you want to delete this order?")) {
@@ -285,6 +282,155 @@
     }
   </script>
   
+  <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOrderModalLabel">Edit Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editOrderForm">
+                    <div class="mb-3">
+                        <label for="editUsername" class="form-label">Name User</label>
+                        <select class="form-select" id="editUsername" required>
+                            <option value="" disabled>Choose user...</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTotalPrice" class="form-label">Total Price</label>
+                        <input type="number" class="form-control" id="editTotalPrice" placeholder="Enter total price" min="0" step="100" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStatus" class="form-label">Status</label>
+                        <select class="form-select" id="editStatus" required>
+                            <option value="" disabled>Choose status...</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="editOrderId"> <!-- Hidden input for Order ID -->
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function editOrder(orderId) {
+        // Ambil elemen modal
+        const modal = new bootstrap.Modal(document.getElementById('editOrderModal'));
+    
+        // Ambil elemen form di modal
+        const editUsername = document.getElementById("editUsername");
+        const editTotalPrice = document.getElementById("editTotalPrice");
+        const editStatus = document.getElementById("editStatus");
+        const editOrderId = document.getElementById("editOrderId");
+    
+        // Kosongkan dropdown untuk mencegah duplikasi
+        editUsername.innerHTML = "";
+
+        // Fetch data order berdasarkan ID
+        fetch(`http://127.0.0.1:8000/api/orders/${orderId}/`, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch order: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(order => {
+            // Isi form dengan data order
+            editOrderId.value = order.id_order; 
+            editTotalPrice.value = order.total_price;
+            editStatus.value = order.status;
+
+            // Fetch data user untuk mengisi dropdown
+            return fetch("http://127.0.0.1:8000/api/users/", {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch users: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(users => {
+            // Tambahkan opsi pengguna ke dropdown
+            users.forEach(user => {
+                const option = document.createElement("option");
+                option.value = user.id;
+                option.textContent = user.username;
+
+                // Tandai user yang cocok dengan order
+                if (user.id === parseInt(editOrderId.value)) {
+                    option.selected = true;
+                }
+
+                editUsername.appendChild(option);
+            });
+
+            // Tampilkan modal
+            modal.show();
+        })
+        .catch(error => {
+            console.error("Error fetching order or users:", error);
+            alert("Failed to load order or user data.");
+        });
+    }
+
+    document.getElementById("editOrderForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+    
+        const orderId = document.getElementById("editOrderId").value;
+        const userId = document.getElementById("editUsername").value;
+        const totalPrice = document.getElementById("editTotalPrice").value;
+        const status = document.getElementById("editStatus").value;
+    
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    user: userId,
+                    total_price: totalPrice,
+                    status: status
+                })
+            });
+
+            console.log("Response status:", response.status);
+            if (response.ok) {
+                alert("Order updated successfully!");
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editOrderModal'));
+                modal.hide(); // Tutup modal
+                fetchOrders(); // Refresh data di tabel
+            } else {
+                const error = await response.json();
+                console.error("Error updating order:", error);
+                alert(`Failed to update order: ${error.message || "Unknown error"}`);
+            }
+        } catch (error) {
+            console.error("Error updating order:", error);
+            alert("Unable to update order. Please try again.");
+        }
+    });
+
+    function fetchOrders() {
+        // Fungsi untuk me-refresh data tabel
+        console.log("Fetching orders...");
+        // Implementasi fetchOrders di sini
+    }
+</script>
 
 </body>
 </html>

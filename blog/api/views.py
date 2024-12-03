@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 
 
+
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -40,6 +41,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 # ViewSet untuk Order
 class OrderViewSet(viewsets.ModelViewSet):
