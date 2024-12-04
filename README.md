@@ -14,8 +14,8 @@
   ```
 
 
-username  : superadmin \
-password  : 12345678
+username  : admin \
+password  : admin
 
 
 NOTE! \
