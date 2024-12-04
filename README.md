@@ -21,7 +21,7 @@ password  : admin
 NOTE! \
 jika tidak bisa,install dulu  : 
 ```
-pip install django djangorestframework djangorestframework-simplejwt \
+pip install django djangorestframework djangorestframework-simplejwt 
 ```
 jalankan server : 
 ```
