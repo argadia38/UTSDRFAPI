@@ -159,12 +159,7 @@
                         </div>
                         <div class="card-body">
                             <form id="categoryForm">
-                                <!-- ID Category -->
-                                <div class="mb-3">
-                                    <label for="id_category" class="form-label">ID Category</label>
-                                    <input type="text" class="form-control" id="id_category" placeholder="Enter ID Category">
-                                </div>
-                            
+
                                 <!-- Nama -->
                                 <div class="mb-3">
                                     <label for="nama" class="form-label">Nama</label>
@@ -235,23 +230,21 @@
     
             // Handle form submission
             document.getElementById("submitCategory").addEventListener("click", async () => {
-                const idCategory = document.getElementById("id_category").value;
                 const name = document.getElementById("nama").value;
                 const description = document.getElementById("deskripsi").value;
     
-                if (!idCategory || !name || !description) {
+                if (!name || !description) {
                     alert("All fields are required!");
                     return;
                 }
     
                 const data = {
-                    id: idCategory, // Replace with the expected ID field name, if needed
                     name: name,
                     description: description,
                 };
     
                 try {
-                    const response = await fetch(`${apiBaseURL}/categories/`, {
+                    const response = await fetch(`${apiBaseURL}`, {
                         method: "POST",
                         headers: headers,
                         body: JSON.stringify(data),

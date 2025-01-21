@@ -14,12 +14,19 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField() 
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     nameCategory = serializers.CharField(source='category.name', read_only=True)
         
     class Meta:
         model = Product
         fields = '__all__'
+        
+    def get_image(self, obj):
+        if obj.image:  
+            return obj.image.url 
+        return '../media/images/default.png' 
+
 
 class OrderSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
