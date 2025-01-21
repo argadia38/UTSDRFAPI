@@ -14,7 +14,7 @@
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand ps-3" href="index.html">Toko Pakaian</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -58,21 +58,14 @@
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div> -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
-                                <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="table.html">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                Report
                             </a>
-                            <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="form.html">Form</a>
-                                    <a class="nav-link" href="table.html">Table</a>
-                                </nav>
-                            </div>
                             
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrdersDetail" aria-expanded="false" aria-controls="collapseOrdersDetail">
                                 <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders_detail
+                                Order
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseOrdersDetail" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -159,30 +152,74 @@
                         <h3>Form Order Detail</h3>
                       </div>
                       <div class="card-body">
-                        <form>
-                          <!-- Order ID -->
-                          <div class="mb-3">
-                            <label for="order_id" class="form-label">Order ID</label>
-                            <select class="form-select" id="order_id">
-                                <option selected>Pilih kasir...</option>
-                            </select>
-                          </div>
-                          
-                          <!-- Quantity -->
-                          <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Enter Quantity" min="0" step="1">
-                          </div>
-                          
-                          <!-- Price -->
-                          <div class="mb-3">
-                            <label for="price" class="form-label">Price</label>
-                            <input type="number" class="form-control" id="price" placeholder="Enter Price" min="0" step="100">
-                          </div>
-                          
-                          
-                          <!-- Submit Button -->
-                          <button type="submit" class="btn btn-primary">Submit</button>
+                        <form id="orderDetailForm">
+                            <div class="mb-3">
+                                <label for="user" class="form-label">Kasir</label>
+                                <select class="form-select" id="user" required>
+                                    <option value="">Select Kasir...</option>
+                                </select>
+                            </div>
+                        
+                            <div id="productList">
+                                <div class="product-entry mb-4 border p-3 rounded">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Product</label>
+                                            <select class="form-select product-select" id="id_product" required>
+                                                <option value="" data-size="">Select Product...</option>
+                                            </select>                                            
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Size</label>
+                                            <input type="text" id="size" class="form-control" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="number" id="quantity" class="form-control quantity-input" min="1" value="1" required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Price</label>
+                                            <input type="number" id="price" class="form-control price-display" readonly>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label">Subtotal</label>
+                                            <input type="number" id="total_price" class="form-control subtotal-display" readonly>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="form-label">&nbsp;</label>
+                                            <button type="button" class="btn btn-danger btn-remove-product">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-success" id="addProductBtn">
+                                    <i class="fas fa-plus"></i> Add Product
+                                </button>
+                            </div>
+                        
+                            <div class="row mb-3">
+                                <div class="col-md-6 offset-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Order Summary</h5>
+                                            <div class="d-flex justify-content-between mb-2">
+                                                <span>Total Items:</span>
+                                                <span id="totalItems">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <h5>Total Amount:</h5>
+                                                <h5 id="totalAmount">$0.00</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <button type="submit" class="btn btn-primary">Create Order</button>
                         </form>
                       </div>
                     </div>
@@ -220,6 +257,164 @@
             // Redirect ke halaman login
             window.location.href = "login.html";
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let products = [];
+            let users = [];
+            const token = localStorage.getItem('accessToken');
+
+            // Fetch users and products when page loads
+            Promise.all([
+                fetch('http://localhost:8000/api/users/', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch('http://localhost:8000/api/products/', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+            ])
+            .then(responses => Promise.all(responses.map(res => res.json())))
+            .then(([userData, productData]) => {
+                users = userData;
+                products = productData;
+                
+                // Populate user select
+                const userSelect = document.getElementById('user');
+                users.forEach(user => {
+                    const option = new Option(user.username, user.id);
+                    userSelect.add(option);
+                });
+
+                // Populate initial product select
+                populateProductSelect(document.querySelector('.product-select'));
+            });
+
+            function populateProductSelect(select) {
+                products.forEach(product => {
+                    const option = new Option(product.name, product.id_product);
+                    option.dataset.size = product.size;
+                    select.add(option);
+                });
+            }
+
+            // Handle adding new product entry
+            document.getElementById('addProductBtn').addEventListener('click', function() {
+                const productEntry = document.querySelector('.product-entry').cloneNode(true);
+                productEntry.querySelector('.product-select').value = '';
+                productEntry.querySelector('#size').value = '';
+                productEntry.querySelector('.quantity-input').value = 1;
+                productEntry.querySelector('.price-display').value = '';
+                productEntry.querySelector('.subtotal-display').value = '';
+                document.getElementById('productList').appendChild(productEntry);
+                setupProductEntryListeners(productEntry);
+            });
+
+            // Setup listeners for product entry
+            function setupProductEntryListeners(entry) {
+                const productSelect = entry.querySelector('.product-select');
+                const sizeDisplay = entry.querySelector('#size');
+                const quantityInput = entry.querySelector('.quantity-input');
+                const priceDisplay = entry.querySelector('.price-display');
+                const subtotalDisplay = entry.querySelector('.subtotal-display');
+                const removeBtn = entry.querySelector('.btn-remove-product');
+
+                productSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const product = products.find(p => p.id_product == this.value);
+                    if (product) {
+                        sizeDisplay.value = selectedOption.dataset.size || product.size;
+                        priceDisplay.value = product.price;
+                        updateSubtotal(entry);
+                    }
+                });
+
+                quantityInput.addEventListener('change', function() {
+                    updateSubtotal(entry);
+                });
+
+                removeBtn.addEventListener('click', function() {
+                    if (document.querySelectorAll('.product-entry').length > 1) {
+                        entry.remove();
+                        updateTotalAmount();
+                    }
+                });
+            }
+
+            // Update subtotal for a product entry
+            function updateSubtotal(entry) {
+                const price = parseFloat(entry.querySelector('.price-display').value) || 0;
+                const quantity = parseInt(entry.querySelector('.quantity-input').value) || 0;
+                entry.querySelector('.subtotal-display').value = (price * quantity).toFixed(2);
+                updateTotalAmount();
+            }
+
+            // Update total amount
+            function updateTotalAmount() {
+                let total = 0;
+                let totalItems = 0;
+                document.querySelectorAll('.product-entry').forEach(entry => {
+                    total += parseFloat(entry.querySelector('.subtotal-display').value) || 0;
+                    totalItems += parseInt(entry.querySelector('.quantity-input').value) || 0;
+                });
+                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+                document.getElementById('totalItems').textContent = totalItems;
+            }
+
+            // Handle form submission
+            document.getElementById('orderDetailForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const orderData = {
+                    user: document.getElementById('user').value,
+                    total_price: parseFloat(document.getElementById('totalAmount').textContent.replace('$', '')),
+                    order_details: []
+                };
+
+                // Create order
+                try {
+                    const orderResponse = await fetch('http://localhost:8000/api/orders/', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(orderData)
+                    });
+
+                    if (!orderResponse.ok) throw new Error('Failed to create order');
+                    
+                    const order = await orderResponse.json();
+
+                    // Create order details
+                    const orderDetails = Array.from(document.querySelectorAll('.product-entry')).map(entry => ({
+                        order: order.id_order,
+                        product: entry.querySelector('.product-select').value,
+                        quantity: parseInt(entry.querySelector('.quantity-input').value),
+                        price: parseFloat(entry.querySelector('.price-display').value)
+                    }));
+
+                    // Submit all order details
+                    await Promise.all(orderDetails.map(detail =>
+                        fetch('http://localhost:8000/api/orderdetails/', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(detail)
+                        })
+                    ));
+
+                    alert('Order created successfully!');
+                    window.location.href = 'table.html';
+                } catch (error) {
+                    alert('Error creating order: ' + error.message);
+                }
+            });
+
+            // Setup initial product entry listeners
+            setupProductEntryListeners(document.querySelector('.product-entry'));
+        });
     </script>
 </body>
 </html>

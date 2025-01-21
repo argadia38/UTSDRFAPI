@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand ps-3" href="index.html">Toko Pakaian</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -57,21 +57,14 @@
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div> -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
+                            <a class="nav-link" href="table.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                Report
                             </a>
-                            <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="form.html">Form</a>
-                                    <a class="nav-link" href="table.html">Table</a>
-                                </nav>
-                            </div>
                             
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrdersDetail" aria-expanded="false" aria-controls="collapseOrdersDetail">
                                 <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders_detail
+                                Order
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseOrdersDetail" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
@@ -203,24 +196,6 @@
                                     </select>
                                 </div>
                                 
-                                <!-- Gambar -->
-                                <div class="mb-3">
-                                    <label for="image" class="form-label">Gambar</label>
-                                    <!-- File input -->
-                                    <input type="file" class="form-control" id="image" accept="image/*" onchange="previewImage(event)">
-                                    <!-- Image preview -->
-                                    <div class="mt-2">
-                                        <img id="imagePreview" src="#" alt="Image Preview" style="max-width: 300px; max-height: 300px; display: none;" />
-                                    </div>
-                                </div>
-                                
-                                <script>
-                                    function previewImage(event) {
-                                        var output = document.getElementById('imagePreview');
-                                        output.style.display = 'block'; // Show the image preview
-                                        output.src = URL.createObjectURL(event.target.files[0]); // Set the image source
-                                    }
-                                </script>
                                 
                                 
                                 <!-- Submit Button -->
@@ -314,7 +289,6 @@
             const size = document.getElementById('size').value;
             const stock = document.getElementById('stock').value;
             const categoryId = document.getElementById('category_id').value;
-            const imageFile = document.getElementById('image').files[0];
     
             // Tambahkan data ke FormData
             formData.append("name", name);
@@ -324,9 +298,6 @@
             formData.append("stock", parseInt(stock));
             formData.append("category", parseInt(categoryId));
     
-            if (imageFile) {
-                formData.append("image", imageFile); // Tambahkan file gambar ke FormData
-            }
     
             try {
                 const response = await fetch('http://localhost:8000/api/products/', {

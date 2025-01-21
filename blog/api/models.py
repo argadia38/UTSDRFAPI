@@ -22,7 +22,6 @@ class Product(models.Model):
     size = models.CharField(max_length=50, choices=[('S', 'S'), ('M', 'M'), ('L', 'L'), ('XL', 'XL')])
     stock = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -35,6 +34,8 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     order_date = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=50, choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')],
+        default='Pending')
 
     def __str__(self):
         return f"Order {self.id_order} by {self.user.username}"
@@ -43,7 +44,7 @@ class Order(models.Model):
 class OrderDetail(models.Model):
     id_detail = models.AutoField(primary_key=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_details')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_details')
+    id_product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_details')
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Harga saat pembelian
     created_at = models.DateTimeField(auto_now_add=True)

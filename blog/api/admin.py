@@ -22,7 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
 # Admin untuk Order
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id_order', 'user', 'order_date', 'total_price',)
+    list_display = ('id_order', 'user', 'order_date', 'total_price','status')
     search_fields = ('user__username',)  # Perbaikan, menjadikannya tuple
     list_filter = ('order_date', 'user',)  # Menambahkan lebih banyak filter
     ordering = ('id_order',)
@@ -31,8 +31,8 @@ class OrderAdmin(admin.ModelAdmin):
 # Admin untuk OrderDetail
 @admin.register(OrderDetail)
 class OrderDetailAdmin(admin.ModelAdmin):
-    list_display = ('id_detail', 'order', 'product', 'quantity', 'price', 'created_at', 'updated_at')
-    search_fields = ('order__id_order', 'product__name')
+    list_display = ('id_detail', 'order', 'id_product', 'quantity', 'price', 'created_at', 'updated_at')
+    search_fields = ('order__id_order', 'product__id_products')
     list_filter = ('created_at', 'updated_at')
     ordering = ('id_detail',)
-    autocomplete_fields = ('order', 'product')
+    autocomplete_fields = ('order', 'id_product',)

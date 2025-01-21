@@ -18,7 +18,7 @@ urlpatterns = [
     path('token/',TokenObtainPairView.as_view()),
     path('token/refresh/',TokenRefreshView.as_view()),
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
-
+    path('orders/<int:order_id>/details/', OrderDetailViewSet.as_view({'get': 'list'}), name='order-details'),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
