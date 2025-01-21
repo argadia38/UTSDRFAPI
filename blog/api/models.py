@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 
 # Create your models here.
 # Tabel Categories
@@ -52,3 +52,11 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return f"Detail {self.id_detail} for Order {self.order.id_order}"
+    
+    class User(models.Model):
+        username = models.CharField(max_length=100)
+        email = models.EmailField()
+        groups = models.ManyToManyField(Group, related_name='users', blank=True)
+        created_at = models.DateTimeField(auto_now_add=True)
+        updated_at = models.DateTimeField(auto_now=True)
+

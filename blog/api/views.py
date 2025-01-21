@@ -99,3 +99,19 @@ class OrderDetailViewSet(viewsets.ModelViewSet):
         if order_id is not None:
             queryset = queryset.filter(order__id_order=order_id)
         return queryset
+    
+    
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Product, Category, Order, OrderDetail, User
+
+class TableCountsView(APIView):
+    def get(self, request, *args, **kwargs):
+        data = {
+            "products": Product.objects.count(),
+            "categories": Category.objects.count(),
+            "orders": Order.objects.count(),
+            "order_details": OrderDetail.objects.count(),
+            "users": User.objects.count(),
+        }
+        return Response(data)

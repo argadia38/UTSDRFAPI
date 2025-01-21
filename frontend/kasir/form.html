@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="../css/styles.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link href="../css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
 </head>
 <body>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -47,34 +49,26 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
-                            
+                            <div class="sb-sidenav-menu-heading">Interface</div>
                             <!-- <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div> -->
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrders" aria-expanded="false" aria-controls="collapseOrders">
-                                <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            <a class="nav-link" href="table.html">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-book"></i></div>
+                                Report
                             </a>
-                            <div class="collapse" id="collapseOrders" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    
-                                    <a class="nav-link" href="table.html">Table</a>
-                                </nav>
-                            </div>
                             
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOrdersDetail" aria-expanded="false" aria-controls="collapseOrdersDetail">
                                 <div class="sb-nav-link-icon"><i class="fas fa-cart-shopping"></i></div>
-                                Orders_detail
+                                Order
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseOrdersDetail" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    
-                                    <a class="nav-link" href="table_order_detail.html">Table</a>
+                                    <a class="nav-link" href="form_order_detail.html">Form</a>
                                 </nav>
                             </div>
                             
@@ -85,7 +79,6 @@
                             </a>
                             <div class="collapse" id="collapseCategories" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    
                                     <a class="nav-link" href="table_category.html">Table</a>
                                 </nav>
                                 
@@ -97,7 +90,6 @@
                             </a>
                             <div class="collapse" id="collapseProducts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    
                                     <a class="nav-link" href="table_product.html">Table</a>
                                 </nav>
                                 
@@ -128,16 +120,8 @@
                                     </div>
                                 </nav>
                             </div>
-                            <!-- <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
-                        </div> -->
+                            
+                        </div> 
                     </div>
                     <!-- <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
@@ -151,30 +135,42 @@
             <main>
                 <div class="container mt-5">
                     <div class="card">
-                        <div class="card-header">
-                            <h3>Table Order Detail</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th >ID</th>
-                                        <th >Order</th>
-                                        <th >Product</th>
-                                        <th >Quantity</th>
-                                        <th >Price</th>
-                                        <th >Created At</th>
-                                        <th >Updated At</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ordetTableBody">
-                                    
-                                </tbody>
-                            </table>
-                        </div>
+                      <div class="card-header">
+                        <h3>Form orders</h3>
+                      </div>
+                      <div class="card-body">
+                        <form id="orderForm" onsubmit="handleOrders(event)">
+                            <!-- Input Field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Name user</label>
+                                <select class="form-select" id="username" required>
+                                    <option selected disabled>Choose user...</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Total Price Field -->
+                            <div class="mb-3">
+                                <label for="totalPrice" class="form-label">Total Harga</label>
+                                <input type="number" class="form-control" id="totalPrice" placeholder="Masukkan total harga" min="0" step="100" required>
+                            </div>
+                        
+                            <!-- Status Field -->
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" required>
+                                    <option selected disabled>Choose status...</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </div>
                     </div>
-                </div>
+                  </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
@@ -191,6 +187,8 @@
         </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="../js/datatables-simple-demo.js"></script>
     <script>
         function logout(){
             localStorage.removeItem('accessToken');
@@ -209,67 +207,70 @@
         }
     </script>
     <script>
-        // Initialize the DataTable
-        document.addEventListener("DOMContentLoaded", () => {
-            const ordetTableBody = document.querySelector("#ordetTableBody");
-      
-            async function fetchOrders() {
-                try {
-                    const response = await fetch("http://127.0.0.1:8000/api/order-details/", {
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
-                        },
-                    });
-      
-                    if (!response.ok) {
-                        throw new Error("Failed to fetch orders");
-                    }
-      
-                    const orderDetails = await response.json();
-                    const ordetArray = Array.isArray(orderDetails) ? orderDetails : orderDetails.results || [];  // Pastikan data sudah berupa array
-                    ordetTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data
-      
-                    // Iterasi data orders dan buat baris untuk setiap order
-                    ordetArray.forEach((ordet) => {
-                      const row = `
-                          <tr>
-                              <td>${ordet.id_detail}</td>
-                              <td>${ordet.order.user.username}</td> <!-- Mengakses username dari user -->
-                              <td>${ordet.product.name}</td>
-                              <td>${ordet.quantity}</td>
-                              <td>${ordet.price}</td>
-                              <td>${ordet.created_at}</td>
-                              <td>${ordet.updated_at}</td>
-                              <td>
-                                  <button class="btn btn-primary btn-sm" onclick="editOrder(${ordet.id_detail})">Edit</button>
-                                  <button class="btn btn-danger btn-sm" onclick="deleteOrder(${ordet.id_detail})">Delete</button>
-                              </td>
-                          </tr>
-                      `;
-                      ordetTableBody.innerHTML += row;
-                  });
-                  
-                } catch (error) {
-                    console.error("Error fetching orders:", error);
-                    alert("Unable to fetch order data.");
+        function handleOrders(event) {
+            event.preventDefault();  // Prevent form from submitting the traditional way
+        
+            // Ambil data dari form
+            const username = document.getElementById('username').value;
+            const totalPrice = document.getElementById('totalPrice').value;
+            const status = document.getElementById('status').value;
+        
+            // Kirim data ke API (misalnya POST /orders/)
+            fetch('http://127.0.0.1:8000/api/orders/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Jika menggunakan token authentication
+                },
+                body: JSON.stringify({
+                    user: username,  // Username adalah ID user yang dipilih dari dropdown
+                    total_price: totalPrice,
+                    status: status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.id_order) {
+                    alert('Order created successfully!');
+                } else {
+                    alert('Failed to create order!');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        }
+        
+        // Mengambil daftar pengguna untuk dropdown
+        fetch('http://localhost:8000/api/users/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,  // Ambil token dari localStorage
+                'Content-Type': 'application/json',
             }
-      
-            fetchOrders();
+        })
+        .then(response => response.json())
+        .then(users => {
+            const selectElement = document.getElementById('username');
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;  // ID pengguna sebagai value
+                option.textContent = user.username;  // Username sebagai teks yang ditampilkan
+                selectElement.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
+
+        
+    
+        
+    
+
+    </script>
+    
       
-        // Contoh fungsi edit dan delete (implementasikan sesuai kebutuhan)
-        function editOrder(odetailID) {
-            alert(`Edit order with ID: ${odetailID}`);
-            // Implementasi untuk edit order
-        }
-      
-        function deleteOrder(odetailID) {
-            if (confirm("Are you sure you want to delete this order?")) {
-                alert(`Delete order with ID: ${odetailID}`);
-                // Implementasi untuk menghapus order
-            }
-        }
-      </script>
 </body>
 </html>

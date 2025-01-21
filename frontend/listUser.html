@@ -219,17 +219,25 @@
                     }
         
                     const users = await response.json();
-                    const userArray = Array.isArray(users) ? users : users.results || [];  // Pastikan users.results ada jika tidak berupa array
+                    const userArray = Array.isArray(users) ? users : users.results || [];
+        
                     userTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data
         
-                    // Iterasi data users dan buat baris untuk setiap user
                     userArray.forEach((user) => {
+                        // Pengecekan data grup
+                        let groupName = 'No Group';  // Default jika tidak ada grup
+                        if (user.Group && Array.isArray(user.Group) && user.Group.length > 0) {
+                            groupName = user.Group[0].name;  // Ambil nama grup pertama
+                        } else if (user.Group && user.Group.name) {
+                            groupName = user.Group.name;  // Jika hanya satu grup
+                        }
+        
                         const row = `
                             <tr>
                                 <td>${user.id}</td>
                                 <td>${user.username}</td>
                                 <td>${user.email}</td>
-                                <td></td>
+                                <td>${groupName}</td> <!-- Menampilkan nama grup -->
                                 <td>${user.date_joined}</td>
                                 <td>${user.last_login}</td>
                                 <td>
@@ -248,6 +256,7 @@
         
             fetchUsers();
         });
+        
         
         
     </script>
